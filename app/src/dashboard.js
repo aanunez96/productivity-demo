@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
     BrowserRouter as Router,
     Switch,
@@ -15,6 +15,8 @@ import Home from './screens/home/Home';
 import SingIn from "./screens/authentication/SignIn";
 import SingUp from "./screens/authentication/SignUp";
 import Error from "./screens/Error";
+import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
+import {Context} from "./utils/Store";
 
 function Copyright() {
     return (
@@ -47,7 +49,30 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
     const classes = useStyles();
+    const [user] = useContext(Context);
 
+    function PrivateRoute({children, ...rest}) {
+        return (
+            <Route
+                {...rest}
+                render={({location}) =>
+                    user === "undefined" ?
+                        <LinearProgress/>
+                        :
+                        user ? (
+                            children
+                        ) : (
+                            <Redirect
+                                to={{
+                                    pathname: "/login",
+                                    state: {from: location}
+                                }}
+                            />
+                        )
+                }
+            />
+        );
+    }
     return (
         <Router>
             <div className={classes.app}>
@@ -56,9 +81,9 @@ export default function Dashboard() {
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer}/>
                     <Switch>
-                        <Route exact path="/">
+                        <PrivateRoute exact path="/">
                             <Home/>
-                        </Route>
+                        </PrivateRoute>
                         <Route exact path="/login">
                             <SingIn/>
                         </Route>
