@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@accounts/graphql-api": "^0.27.0",
+    "@accounts/mongo": "^0.27.0",
+    "@accounts/password": "^0.27.0",
+    "@accounts/server": "^0.27.0",
+    "@graphql-modules/core": "^0.7.17",
+    "@graphql-toolkit/schema-merging": "^0.10.7",
+    "apollo-server": "^2.15.0",
+    "apollo-server-express": "^2.15.0",
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "graphql": "^15.1.0",
+    "jwt-simple": "^0.5.6",
+    "moment": "^2.27.0",
+    "mongoose": "^5.9.20",
+    "uuid": "^8.2.0",
+    "uuidv4": "^6.1.1"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
