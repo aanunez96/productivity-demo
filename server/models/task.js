@@ -6,9 +6,9 @@ const TaskSchema = new Schema({
     owner: {type: Schema.Types.ObjectId, ref: 'user', required: true},
     classification: {type: String, enum: ['short', 'medium', 'long', 'customized'], default:'customized', required: true},
     description: {type: String},
-    delete: {type: Schema.Types.Boolean, default: false, required: true},
+    isDelete: {type: Schema.Types.Boolean, default: false, required: true},
     date:  {type: Schema.Types.String, required: true},
-    duration: {type: Schema.Number, },
+    duration: {type: Schema.Types.Number },
 },);
 
 module.exports = mongoose.model('Task', TaskSchema, 'task');
