@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  react:
+    image: raam-react-image
+    build:
+      context: ./
+      dockerfile: ./dockerfile/react/Dockerfile
+    command: ["tail", "-f", "/dev/null"]
+    ports:
+      - 3000:3000
+    volumes:
+        - ./app:/usr/src/app
+    container_name: raam-react
+
+  express:
+    image: node
+    environment:
+      MONGO_ROOT_USERNAME: root
+      MONGO_ROOT_PASSWORD: example
+    command: ["tail", "-f", "/dev/null"]
+    working_dir: /usr/src/app
+    ports:
+      - 3001:3000
+    volumes:
+        - ./server:/usr/src/app
+    container_name: raam-express
+
+  mongo:
+    image: mongo
+    restart: always
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./data/mongo:/data/db
+    container_name: raam-mongo
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    container_name: raam-mongo-express
