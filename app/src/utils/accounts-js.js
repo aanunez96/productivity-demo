@@ -16,8 +16,6 @@ const accountsGraphQL = new GraphQLClient({
       profile{
         name
         lastName
-        number
-        avatar
       }
     }
   `,

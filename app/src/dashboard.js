@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import {makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Box from '@material-ui/core/Box';
+// import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Navigator from './components/themes/Navigator';
@@ -17,6 +17,9 @@ import SingUp from "./screens/authentication/SignUp";
 import Error from "./screens/Error";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import {Context} from "./utils/Store";
+import EditProfile from "./screens/user/EditProfile";
+import CreateTask from "./screens/task/CreateTask";
+import UpdateTask from "./screens/task/UpdateTask";
 
 function Copyright() {
     return (
@@ -32,15 +35,18 @@ function Copyright() {
 }
 
 const useStyles = makeStyles((theme) => ({
-    app: {
+    root: {
         flex: 1,
         display: 'flex',
+        // flexDirection: 'column',
         minHeight: '100vh'
     },
     appBarSpacer: theme.mixins.toolbar,
     content: {
-        flexGrow: 1,
-        overflow: 'auto',
+        // flexGrow: 1,
+        // overflow: 'auto',
+        flex: 1,
+        padding: theme.spacing(3, 4),
     },
     footer: {
         padding: theme.spacing(2),
@@ -73,31 +79,39 @@ export default function Dashboard() {
             />
         );
     }
+
     return (
         <Router>
-            <div className={classes.app}>
+            <div className={classes.root}>
                 <CssBaseline/>
                 <Navigator/>
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer}/>
                     <Switch>
-                        <PrivateRoute exact path="/">
-                            <Home/>
-                        </PrivateRoute>
                         <Route exact path="/login">
                             <SingIn/>
                         </Route>
                         <Route exact path="/sign-up">
                             <SingUp/>
                         </Route>
+                        <PrivateRoute exact path="/">
+                            <Home/>
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/edit-profile">
+                            <EditProfile/>
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/create-task/">
+                            <CreateTask/>
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/edit-task/:taskId">
+                            <UpdateTask/>
+                        </PrivateRoute>
                         <Route path="*">
                             <Error content={"Error 404 Page not found"}/>
                         </Route>
                     </Switch>
                     <footer className={classes.footer}>
-                        <Box pt={4}>
-                            <Copyright/>
-                        </Box>
+                        <Copyright/>
                     </footer>
                 </main>
             </div>
