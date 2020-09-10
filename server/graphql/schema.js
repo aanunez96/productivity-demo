@@ -1,29 +1,44 @@
 const {gql} = require('apollo-server');
 
 const typeDefs = gql`
+  scalar Date
   
   type Query {
     tasks(userId: ID, classification: Category, isDelete: Boolean): [Task]
-    task(adId: ID!): Task
-    user(userId: ID): User
+    task(taskId: ID!): Task
+    productivity: [DayProductivity]
+    user(userId: ID): User   
   }
     
   type Task{
     _id: ID!
-    description: String
-    tittle: String!
+    title: String!
     owner: User!
     classification: Category!
+    description: String  
+    status: Status!
     isDelete: Boolean!
-    date:  String!
+    creationDate:  Date!
+    realizationDate:  Date!
+    progress:  Int!
     duration: Int!
+    doneIn: Int!
   }
+  
+  type DayProductivity{
+    doneTask: Int!
+    day: Date!
+  } 
   
   enum Category{
     short
     medium
     long
     customized
+  }
+  enum Status{
+    pending
+    done
   }
   
   type Profile{
@@ -46,10 +61,12 @@ const typeDefs = gql`
   }
   
   type Mutation{
-    createTask(tittle: String!, owner: ID!, description: String, classification: Category!, duration: Int): Task!
+    createTask(title: String!, owner: ID!, description: String, classification: Category!, duration: Int): Task!
     
-    modifyTask(tittle: String, taskId: ID!, description: String, classification: Category, duration: Int, isDelete: Boolean): Task!
-    
+    modifyTask(title: String, taskId: ID!, description: String, classification: Category, duration: Int, isDelete: Boolean): Task!
+
+    randomDoneTask(owner: ID!):[Task!]
+        
     modifyUser(userId: ID!, lastName: String, name: String): User  
   } 
 `;
