@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper/Paper";
-import Chart from "../../components/task/Chart";
-import Orders from "../../components/task/TableTask";
+import Chart from "../../components/task/chart/Chart";
+import DoneTable from "../../components/task/tableDone/TableDoneTask";
 import Container from "@material-ui/core/Container";
 import React from "react";
 import clsx from "clsx";
@@ -43,9 +43,9 @@ export default function Home() {
                     </Paper>
                 </Grid>
                 {/* Recent Orders */}
-                <Grid item xs={12}>
+                <Grid item lg={6} xs={12}>
                     <Paper className={classes.paper}>
-                        <Orders />
+                        <DoneTable />
                     </Paper>
                 </Grid>
             </Grid>

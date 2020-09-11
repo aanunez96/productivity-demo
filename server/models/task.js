@@ -12,7 +12,6 @@ const TaskSchema = new Schema({
     realizationDate: {type: Schema.Types.Date},
     duration: {type: Schema.Types.Number ,required: true},
     progress: {type: Schema.Types.Number, default: 0},
-    doneIn: {type: Schema.Types.Number,},
 },);
 
 module.exports = mongoose.model('Task', TaskSchema, 'task');

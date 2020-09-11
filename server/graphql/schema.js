@@ -4,9 +4,9 @@ const typeDefs = gql`
   scalar Date
   
   type Query {
-    tasks(userId: ID, classification: Category, isDelete: Boolean): [Task]
+    tasks(userId: ID, classification: Category, pending: Boolean!): [Task]
     task(taskId: ID!): Task
-    productivity: [DayProductivity]
+    productivity(start: Date!, end: Date!, owner: ID!): [DayProductivity]
     user(userId: ID): User   
   }
     
@@ -22,7 +22,6 @@ const typeDefs = gql`
     realizationDate:  Date!
     progress:  Int!
     duration: Int!
-    doneIn: Int!
   }
   
   type DayProductivity{

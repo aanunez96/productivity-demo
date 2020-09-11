@@ -31,7 +31,8 @@ const resolvers = {
             return moment(value);
         },
         serialize(value) {
-            return moment(value).format("dddd, MMMM Do YYYY");
+            return moment(value).format("DD/MM/YYYY");
+            // return moment(value).format("dddd, MMMM Do YYYY");
         },
         parseLiteral(ast) {
             if (ast.kind === Kind.INT) {
@@ -41,16 +42,16 @@ const resolvers = {
         },
     }),
     Query: {
-        tasks: async (_, {userId, classification, isDelete}) => {
+        tasks: async (_, {userId, classification, pending}) => {
             const query = {};
+            query.isDelete = false;
+            query.status = (pending) ? "pending" : "done";
+
             if (userId) {
                 query.owner = new ObjectID(userId);
             }
             if (classification) {
                 query.classification = classification;
-            }
-            if (isDelete) {
-                query.isDelete = isDelete;
             }
             const tasks = await Task.find(query).exec();
             return tasks.map(e => ({...e._doc, owner: accountsServer.findUserById(e.owner)}));
@@ -65,16 +66,18 @@ const resolvers = {
 
             return user
         },
-        productivity: async () => {
-            let dateStart = moment();
-            const dateEnd = moment(dateStart).add(2, 'days');
+        productivity: async (_, {start, end, owner}) => {
+            let dateStart = moment(start);
+            const dateEnd = moment(end);
             const dateArray = [];
             while (dateStart <= dateEnd) {
                 dateArray.push(moment(dateStart).format('YYYY-MM-DD'));
                 dateStart = moment(dateStart).add(1, 'days');
             }
             const productivity = dateArray.map(async day => {
-                const doneTask = await Task.countDocuments({realizationDate: day});
+                const doneTask = await Task.countDocuments(
+                    {realizationDate: day, owner: new ObjectID(owner),status: 'done',isDelete: false}
+                    );
                 return {doneTask, day};
             });
             return productivity;
@@ -130,12 +133,12 @@ const resolvers = {
             let task;
             let date;
             const tasks = [];
-            for (let i = 1; i <= 3; i++) {
+            for (let i = 1; i <= 20; i++) {
                 duration = faker.random.number(7200);
                 percent = Math.floor(duration * 4 / 5);
                 doneIn = faker.random.number(duration - percent);
                 date = faker.date.between(moment().subtract(7, "days"), moment());
-                task =new Task({
+                task = new Task({
                     title: faker.name.jobTitle(),
                     owner: owner,
                     classification: 'customized',
@@ -144,7 +147,7 @@ const resolvers = {
                     creationDate: moment(faker.date.recent(14)).format('YYYY-MM-DD'),
                     realizationDate: moment(date).format('YYYY-MM-DD'),
                     duration: duration,
-                    doneIn: percent + doneIn,
+                    progress: percent + doneIn,
                 });
                 task.save();
                 tasks.push(task);
