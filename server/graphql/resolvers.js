@@ -42,7 +42,7 @@ const resolvers = {
         },
     }),
     Query: {
-        tasks: async (_, {userId, classification, pending}) => {
+        tasks: async (_, {userId, classification, pending, limit, sort}) => {
             const query = {};
             query.isDelete = false;
             query.status = (pending) ? "pending" : "done";
@@ -53,7 +53,11 @@ const resolvers = {
             if (classification) {
                 query.classification = classification;
             }
-            const tasks = await Task.find(query).exec();
+
+            const tasks = await Task.find(query)
+                .limit(limit)
+                .sort((sort) ? `-${sort}` : '')
+                .exec();
             return tasks.map(e => ({...e._doc, owner: accountsServer.findUserById(e.owner)}));
         },
         task: async (_, {taskId}) => {
@@ -76,8 +80,8 @@ const resolvers = {
             }
             const productivity = dateArray.map(async day => {
                 const doneTask = await Task.countDocuments(
-                    {realizationDate: day, owner: new ObjectID(owner),status: 'done',isDelete: false}
-                    );
+                    {realizationDate: day, owner: new ObjectID(owner), status: 'done', isDelete: false}
+                );
                 return {doneTask, day};
             });
             return productivity;

@@ -43,7 +43,7 @@ export default function Home() {
                     </Paper>
                 </Grid>
                 {/* Recent Orders */}
-                <Grid item lg={6} xs={12}>
+                <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <DoneTable />
                     </Paper>
