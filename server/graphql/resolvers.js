@@ -7,19 +7,19 @@ const {GraphQLScalarType} = require('graphql');
 const {Kind} = require('graphql/language');
 const faker = require('faker');
 
-const durationForClassification = (classification) => {
+const durationForClassification = (classification, filter) => {
     switch (classification) {
         case 'short':
-            return 1800;
+            return (filter)?{ $gt: 0, $lt: 1801 }:1800;
 
         case 'medium':
-            return 2700;
+            return (filter)?{ $gt: 1800, $lt: 3601 }:2700;
 
         case  'long'  :
-            return 3600;
+            return (filter)?{ $gt: 3600, $lt: 7201 }:3600;
 
         default:
-            return 0;
+            return (filter)?{ $gt: 0, $lt: 7201 }:0;
     }
 };
 
@@ -42,7 +42,7 @@ const resolvers = {
         },
     }),
     Query: {
-        tasks: async (_, {userId, classification, pending, limit, sort}) => {
+        tasks: async (_, {userId, category, pending, limit, sort}) => {
             const query = {};
             query.isDelete = false;
             query.status = (pending) ? "pending" : "done";
@@ -50,8 +50,8 @@ const resolvers = {
             if (userId) {
                 query.owner = new ObjectID(userId);
             }
-            if (classification) {
-                query.classification = classification;
+            if (category !== 'none') {
+                query.duration = durationForClassification(category, true);
             }
 
             const tasks = await Task.find(query)
@@ -104,7 +104,7 @@ const resolvers = {
             task.save();
             return task;
         },
-        async modifyTask(_, {title, taskId, description, classification, isDelete, date, duration}) {
+        async modifyTask(_, {title, taskId, description, classification, isDelete, duration, progress,}) {
             const task = await Task.findOne({_id: new ObjectID(taskId)}).exec();
             if (title) {
                 task.title = title;
@@ -121,11 +121,11 @@ const resolvers = {
             if (isDelete) {
                 task.isDelete = isDelete;
             }
-            if (date) {
-                task.title = date;
-            }
             if (duration) {
                 task.duration = duration;
+            }
+            if(progress){
+                task.progress = progress;
             }
             task.save();
             return task;
@@ -137,21 +137,21 @@ const resolvers = {
             let task;
             let date;
             const tasks = [];
-            for (let i = 1; i <= 20; i++) {
+            for (let i = 1; i <= 10; i++) {
                 duration = faker.random.number(7200);
                 percent = Math.floor(duration * 4 / 5);
                 doneIn = faker.random.number(duration - percent);
                 date = faker.date.between(moment().subtract(7, "days"), moment());
                 task = new Task({
-                    title: faker.name.jobTitle(),
+                    title: faker.random.word(),
                     owner: owner,
                     classification: 'customized',
-                    description: faker.lorem.sentences(),
-                    status: 'done',
+                    description: faker.lorem.sentences(4),
+                    status: 'pending',
                     creationDate: moment(faker.date.recent(14)).format('YYYY-MM-DD'),
-                    realizationDate: moment(date).format('YYYY-MM-DD'),
+                    // realizationDate: moment(date).format('YYYY-MM-DD'),
                     duration: duration,
-                    progress: percent + doneIn,
+                    // progress: percent + doneIn,
                 });
                 task.save();
                 tasks.push(task);

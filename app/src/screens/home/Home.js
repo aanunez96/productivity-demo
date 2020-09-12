@@ -2,6 +2,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper/Paper";
 import Chart from "../../components/task/chart/Chart";
 import DoneTable from "../../components/task/tableDone/TableDoneTask";
+import CardTask from '../../components/task/cardTask/CardTask';
 import Container from "@material-ui/core/Container";
 import React from "react";
 import clsx from "clsx";
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
     },
     fixedHeight: {
-        height: 240,
+        height: 350,
     },
 }));
 
@@ -39,8 +40,9 @@ export default function Home() {
                 </Grid>
                 {/* Recent Deposits */}
                 <Grid item xs={12} md={4} lg={3}>
-                    <Paper className={fixedHeightPaper}>
-                    </Paper>
+                    {/*<Paper className={fixedHeightPaper}>*/}
+                    {/*</Paper>*/}
+                    <CardTask data={{title:"habla", realizationDate:"27/08/19", description:"eso papi"}} className={fixedHeightPaper}/>
                 </Grid>
                 {/* Recent Orders */}
                 <Grid item xs={12}>

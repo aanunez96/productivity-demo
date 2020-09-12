@@ -20,6 +20,7 @@ import {Context} from "./utils/Store";
 import EditProfile from "./screens/user/EditProfile";
 import CreateTask from "./screens/task/CreateTask";
 import UpdateTask from "./screens/task/UpdateTask";
+import ListPendigTask from "./screens/task/ListPendingTasks";
 
 function Copyright() {
     return (
@@ -100,7 +101,10 @@ export default function Dashboard() {
                         <PrivateRoute exact path="/edit-profile">
                             <EditProfile/>
                         </PrivateRoute>
-                        <PrivateRoute exact path="/create-task/">
+                        <PrivateRoute exact path="/pending-tasks">
+                            <ListPendigTask/>
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/create-task">
                             <CreateTask/>
                         </PrivateRoute>
                         <PrivateRoute exact path="/edit-task/:taskId">
