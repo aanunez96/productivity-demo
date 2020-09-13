@@ -5,7 +5,7 @@ const typeDefs = gql`
   
   type Query {
     tasks(userId: ID, category: Category, pending: Boolean!, limit: Int, sort: String): [Task]
-    task(taskId: ID!): Task
+    task(taskId: ID, inProgress: Boolean): Task
     productivity(start: Date!, end: Date!, owner: ID!): [DayProductivity]
     user(userId: ID): User   
   }
@@ -63,7 +63,7 @@ const typeDefs = gql`
   type Mutation{
     createTask(title: String!, owner: ID!, description: String, classification: Category!, duration: Int): Task!
     
-    modifyTask(title: String, taskId: ID!, description: String, classification: Category, duration: Int, isDelete: Boolean, progress: Int): Task!
+    modifyTask(title: String, taskId: ID!, description: String, status: Status, classification: Category, duration: Int, isDelete: Boolean, progress: Int, realizationDate:Date): Task!
 
     randomDoneTask(owner: ID!):[Task!]
         

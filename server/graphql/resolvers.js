@@ -10,16 +10,16 @@ const faker = require('faker');
 const durationForClassification = (classification, filter) => {
     switch (classification) {
         case 'short':
-            return (filter)?{ $gt: 0, $lt: 1801 }:1800;
+            return (filter) ? {$gt: 0, $lt: 1801} : 1800;
 
         case 'medium':
-            return (filter)?{ $gt: 1800, $lt: 3601 }:2700;
+            return (filter) ? {$gt: 1800, $lt: 3601} : 2700;
 
         case  'long'  :
-            return (filter)?{ $gt: 3600, $lt: 7201 }:3600;
+            return (filter) ? {$gt: 3600, $lt: 7201} : 3600;
 
         default:
-            return (filter)?{ $gt: 0, $lt: 7201 }:0;
+            return (filter) ? {$gt: 0, $lt: 7201} : 0;
     }
 };
 
@@ -60,8 +60,8 @@ const resolvers = {
                 .exec();
             return tasks.map(e => ({...e._doc, owner: accountsServer.findUserById(e.owner)}));
         },
-        task: async (_, {taskId}) => {
-            const task = await Task.findById(new ObjectID(taskId));
+        task: async (_, {taskId, inProgress}) => {
+            const task = (inProgress) ? (await Task.find({status: 'pending'}).sort('creationDate').limit(1).exec())[0] : await Task.findById(new ObjectID(taskId));
             return (task) ? {...task._doc, owner: accountsServer.findUserById(task.owner)} : task;
         },
         user: async (_, {userId}) => {
@@ -104,13 +104,19 @@ const resolvers = {
             task.save();
             return task;
         },
-        async modifyTask(_, {title, taskId, description, classification, isDelete, duration, progress,}) {
+        async modifyTask(_, {title, taskId, description, status, classification, isDelete, duration, progress, realizationDate}) {
             const task = await Task.findOne({_id: new ObjectID(taskId)}).exec();
             if (title) {
                 task.title = title;
             }
             if (description) {
                 task.description = description;
+            }
+            if (realizationDate) {
+                task.realizationDate = realizationDate;
+            }
+            if (status) {
+                task.status = status;
             }
             if (classification) {
                 task.classification = classification;
@@ -124,7 +130,7 @@ const resolvers = {
             if (duration) {
                 task.duration = duration;
             }
-            if(progress){
+            if (progress) {
                 task.progress = progress;
             }
             task.save();
