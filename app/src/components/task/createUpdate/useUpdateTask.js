@@ -8,54 +8,52 @@ query task(
   task(taskId:$taskId){
     _id
     description
-    tittle
+    title
     classification
     duration
-    date
   }
 }`;
 
 const UPDATE_AD = gql`
 mutation updateTask(
   $taskId: ID!
-  $tittle: String
+  $title: String
   $description: String
   $classification: Category
   $duration: Int
 ){
   modifyTask(
-    tittle: $tittle,
+    title: $title,
     taskId: $taskId,
     description: $description,
     duration: $duration,
     classification:$classification
     ){
-    classification
     _id
-    tittle
+    title
     classification
     duration
-    date
+    description
   }
 }
 `;
 
 export default function useUpdateTask(taskId) {
     const {loading, data} = useQuery(GET_AD, {variables: {taskId}});
-    const [createUpdateAd, {data: dataMutation}] = useMutation(UPDATE_AD);
+    const [UpdateTask, {data: dataMutation}] = useMutation(UPDATE_AD);
     const [invalidSubmit, setInvalidSubmit] = useState(false);
 
 
-    const modify = async ({tittle, description, duration, classification}) => {
+    const modify = async ({title, description, duration, classification}) => {
         let variables = {
-            tittle,
+            title,
             description,
             duration,
             classification,
             taskId: data.task._id
         };
         try {
-            await createUpdateAd({variables})
+            await UpdateTask({variables})
         } catch (e) {
             setInvalidSubmit(true);
         }

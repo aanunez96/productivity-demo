@@ -4,14 +4,14 @@ import {Context} from "../../../utils/Store";
 
 const CREATE_AD = gql`
 mutation createTask(
-  $tittle: String!
+  $title: String!
   $description: String
   $duration: Int!
   $owner : ID!
   $classification: Category!
 ){
 createTask(
-  tittle: $tittle,
+  title: $title,
   owner: $owner,
   description: $description,
   classification: $classification,
@@ -19,25 +19,25 @@ createTask(
 ){
   _id
   classification
-  tittle
-  classification
+  title
+  description
   duration
-  date
  }
 }`;
 
 export default function useCreateTask() {
     const [createUpdateAd, {data: dataMutation}] = useMutation(CREATE_AD);
-    const [user] = useContext(Context);
+    const [state] = useContext(Context);
+
     const [invalidSubmit, setInvalidSubmit] = useState(false);
 
-    const modify = async ({tittle, description, duration, classification}) => {
+    const modify = async ({title, description, duration, classification}) => {
         let variables = {
-            tittle,
+            title,
             description,
             duration,
             classification,
-            owner: user.id
+            owner: state.user.id
         };
         try {
             await createUpdateAd({variables})

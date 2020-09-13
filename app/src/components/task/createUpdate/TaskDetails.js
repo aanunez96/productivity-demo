@@ -1,5 +1,5 @@
 import {Box, Button, Card, CardContent, CardHeader, Divider, Grid, TextField} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -32,10 +32,10 @@ export default function TaskDetails(props) {
     const validate = values => {
         const errors = {};
 
-        if (!isUpdate && !values.tittle) {
-            errors.tittle = 'Required';
-        } else if (values.tittle.length > 40) {
-            errors.tittle = 'Must be 40 characters or less';
+        if (!isUpdate && !values.title) {
+            errors.title = 'Required';
+        } else if (values.title.length > 40) {
+            errors.title = 'Must be 40 characters or less';
         }
 
         if (!isUpdate && !values.description) {
@@ -58,7 +58,7 @@ export default function TaskDetails(props) {
 
     const formik = useFormik({
         initialValues: {
-            tittle: "",
+            title: "",
             description: "",
             minutes: 0,
             seconds: 0,
@@ -66,7 +66,7 @@ export default function TaskDetails(props) {
         },
         validate,
         onSubmit: async values => modify({
-            tittle: values.tittle,
+            title: values.title,
             description: values.description,
             duration: values.minutes * 60 + values.seconds,
             classification: values.classification
@@ -95,21 +95,17 @@ export default function TaskDetails(props) {
         formik.handleChange(event);
     };
 
-    const updateField = (task) => {
-
-        formik.setFieldValue("tittle", task.tittle);
-        formik.setFieldValue("description", task.description);
-        formik.setFieldValue("minutes", Math.floor(task.duration/60));
-        formik.setFieldValue("seconds", task.duration % 60);
-        formik.setFieldValue("classification", task.classification);
-        // setFlagData(true);
-    };
-
     useEffect(() => {
-        task && updateField(task);
+        if(task){
+            formik.setFieldValue("title", task.title);
+            formik.setFieldValue("description", task.description);
+            formik.setFieldValue("minutes", Math.floor(task.duration/60));
+            formik.setFieldValue("seconds", task.duration % 60);
+            formik.setFieldValue("classification", task.classification);
+        };
     }, [task]);
 
-    // (data) && history.push(`/ad/${data.classification}/${data._id}`);
+    (data) && history.push(`/pending-tasks`);
 
 
     return (
@@ -140,16 +136,16 @@ export default function TaskDetails(props) {
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
-                                    label="Tittle"
-                                    name="tittle"
+                                    label="Title"
+                                    name="title"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
-                                    value={formik.values.tittle}
+                                    value={formik.values.title}
                                     required
                                     variant="outlined"
                                 />
-                                {formik.touched.tittle && formik.errors.tittle ? (
-                                    <Alert className={classes.alert} severity="error">{formik.errors.tittle}</Alert>
+                                {formik.touched.title && formik.errors.title ? (
+                                    <Alert className={classes.alert} severity="error">{formik.errors.title}</Alert>
                                 ) : null}
                             </Grid>
                             <Grid item lg={4} md={4} xs={12}>

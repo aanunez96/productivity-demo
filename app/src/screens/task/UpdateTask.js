@@ -1,7 +1,7 @@
 import Container from "@material-ui/core/Container";
 import {Grid} from "@material-ui/core";
-import TaskDetails from "../../components/task/presentational/TaskDetails";
-import useUpdateTask from "../../components/task/fechDataHook/useUpdateTask";
+import TaskDetails from "../../components/task/createUpdate/TaskDetails";
+import useUpdateTask from "../../components/task/createUpdate/useUpdateTask";
 import React from "react";
 import {useParams} from "react-router-dom";
 
