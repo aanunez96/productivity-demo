@@ -1,7 +1,7 @@
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
-import CardTask from '../cardTask/CardTask';
+import CardPendingTask from '../cardTask/CardPendingTask';
 import Skeleton from '@material-ui/lab/Skeleton';
 import {Box} from "@material-ui/core";
 import useListPending from "./useListPending";
@@ -31,7 +31,7 @@ export default function ListPending() {
             {(loading ? Array.from(new Array(4)) : data).map((item, index) => (
                 <Grid key={index} item lg={4} md={6} xs={12}>
                     {item ?
-                        <CardTask data={item} refetch={refetch}/>
+                        <CardPendingTask data={item} refetch={refetch}/>
                         :
                         (
                             <Box>

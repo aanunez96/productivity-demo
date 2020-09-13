@@ -8,12 +8,7 @@ import {Divider, makeStyles} from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import PauseIcon from '@material-ui/icons/Pause';
-import StopIcon from '@material-ui/icons/Stop';
-import DoneIcon from '@material-ui/icons/Done';
 import EditIcon from '@material-ui/icons/Edit';
-import RestoreIcon from '@material-ui/icons/Restore';
 import CachedIcon from '@material-ui/icons/Cached';
 import useCard from './useCard';
 import Alert from "@material-ui/lab/Alert/Alert";
@@ -21,7 +16,6 @@ import {Link} from "react-router-dom";
 import Modal from '@material-ui/core/Modal';
 import Paper from "@material-ui/core/Paper/Paper";
 import Button from '@material-ui/core/Button';
-import moment from "moment";
 
 
 const useStyles = makeStyles(theme => ({
@@ -51,14 +45,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function CardTask(props) {
-    const {data, inProgress, refetch} = props;
+export default function CardPendingTask(props) {
+    const {data, refetch} = props;
     const classes = useStyles();
-    const [modify, invalidSubmit] = useCard(data._id);
-    const [running, setRunning] = useState(false);
+    const [deleteTask, invalidSubmit] = useCard(data._id);
     const [modal, setModal] = useState(false);
     const minutesDuration = Math.floor(data.duration / 60);
     const secondsDuration = data.duration % 60;
+
 
     return (
         <>
@@ -77,17 +71,12 @@ export default function CardTask(props) {
                 <Divider variant="middle"/>
                 <CardContent>
                     <Grid container spacing={3}>
-                        <Grid item xs={(inProgress) ? 8 : 12}>
+                        <Grid item xs={12}>
                             <Typography variant="h4" align="center">
-                                {`${(minutesDuration < 10) ? `0${minutesDuration}` : minutesDuration}: ${(secondsDuration < 10) ? `0${secondsDuration}` : secondsDuration}`}
+                                {`${(minutesDuration < 10) ? `0${minutesDuration}` : minutesDuration}:
+                                ${(secondsDuration < 10) ? `0${secondsDuration}` : secondsDuration}`}
                             </Typography>
                         </Grid>
-                        {inProgress &&
-                        <Grid item xs={4}>
-                            <IconButton onClick={() => modify("refresh", refetch)} aria-label="play">
-                                <RestoreIcon/>
-                            </IconButton>
-                        </Grid>}
                         <Grid item xs={12}>
                             <div>
                                 <Typography variant="body2" color="textSecondary" component="p">
@@ -101,32 +90,13 @@ export default function CardTask(props) {
                 </CardContent>
                 <Divider variant="middle"/>
                 <CardActions className={classes.action}>
-                    {(inProgress) ?
-                        <>
-                            <IconButton aria-label="play" onClick={() => setRunning(!running)}
-                                        className={classes.margin}>
-                                {(running) ? <PlayArrowIcon/> : <PauseIcon/>}
-                            </IconButton>
-                            <IconButton aria-label="stop" className={classes.margin}>
-                                <StopIcon/>
-                            </IconButton>
-                            <IconButton aria-label="delete" className={classes.margin}>
-                                <DoneIcon/>
-                            </IconButton>
-                        </>
-                        :
-                        <>
-                            <IconButton aria-label="change" className={classes.margin}>
-                                <CachedIcon/>
-                            </IconButton>
-                            <IconButton aria-label="delete" onClick={() => setModal(true)}
-                                        className={classes.margin}>
-                                <DeleteIcon/>
-                            </IconButton>
-                        </>
-                    }
-
-
+                    <IconButton aria-label="change" className={classes.margin}>
+                        <CachedIcon/>
+                    </IconButton>
+                    <IconButton aria-label="delete" onClick={() => setModal(true)}
+                                className={classes.margin}>
+                        <DeleteIcon/>
+                    </IconButton>
                 </CardActions>
             </Card>
             <Modal
@@ -141,7 +111,7 @@ export default function CardTask(props) {
                     </Typography>
                     <div className={classes.action}>
                         <Button variant="contained" onClick={() => {
-                            modify("delete", refetch);
+                            deleteTask(refetch);
                             setModal(false);
                         }}>Accept</Button>
                         <Button variant="contained" onClick={() => setModal(false)}>Cancel</Button>

@@ -1,5 +1,5 @@
 import {gql, useMutation} from "@apollo/client";
-import {useState} from "react";
+import { useState} from "react";
 
 const UPDATE_AD = gql`
 mutation updateTask(
@@ -22,24 +22,17 @@ export default function useCard(taskId) {
     const [createUpdateAd, {data: dataMutation}] = useMutation(UPDATE_AD);
     const [invalidSubmit, setInvalidSubmit] = useState(false);
 
-    const modify = async (action,refetch) => {
+    const deleteTask = async (refetch) => {
         setInvalidSubmit(false);
-        let variables = {taskId};
-        if (action === "refresh"){
-            variables.progress = 0;
-        }
-        if (action === "delete"){
-            variables.isDelete = true;
-        }
         try {
-            await createUpdateAd({variables});
+            await createUpdateAd({variables:{taskId: taskId,isDelete: true}});
             refetch();
         } catch (e) {
             setInvalidSubmit(true);
         }
     };
     return [
-        modify,
+        deleteTask,
         invalidSubmit,
     ];
 }

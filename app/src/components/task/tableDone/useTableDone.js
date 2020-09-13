@@ -24,9 +24,9 @@ tasks(
 }`;
 
 export default function useChart() {
-    const [user] = useContext(Context);
+    const [state] = useContext(Context);
 
-    const {loading, data} = useQuery(DONE, {variables: {pending:false, userId: user.id}});
+    const {loading, data} = useQuery(DONE, {variables: {pending:false, userId: state.user.id}});
 
     return [
         loading,

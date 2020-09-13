@@ -25,11 +25,11 @@ tasks(
 }`;
 
 export default function useListPending() {
-    const [user] = useContext(Context);
+    const [state] = useContext(Context);
     const [category, setCategory] = useState("none");
     const {loading, data, refetch} = useQuery(PENDING,
         {
-            variables: {pending: true, userId: user.id, category},
+            variables: {pending: true, userId: state.user.id, category},
             fetchPolicy: "network-only"
         }
     );
