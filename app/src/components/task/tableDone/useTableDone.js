@@ -6,11 +6,12 @@ const DONE = gql`
 query donetask(
   $userId: ID!
   $pending: Boolean!
+  $limit: Int
 ){
 tasks(
   pending: $pending
   userId: $userId
-  limit: 10
+  limit: $limit
   sort: "realizationDate"
 ){
   _id
@@ -23,10 +24,10 @@ tasks(
 }
 }`;
 
-export default function useChart() {
+export default function useChart(limit) {
     const [state] = useContext(Context);
 
-    const {loading, data} = useQuery(DONE, {variables: {pending:false, userId: state.user.id}});
+    const {loading, data} = useQuery(DONE, {variables: {pending:false, userId: state.user.id, limit}});
 
     return [
         loading,

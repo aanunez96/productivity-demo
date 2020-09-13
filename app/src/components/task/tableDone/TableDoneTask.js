@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,11 +8,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import useTableDone from "../tableDone/useTableDone";
 import moment from 'moment';
-// import Title from './Title';
+import {Link as RouterLink} from "react-router-dom";
+import Typography from '@material-ui/core/Typography';
 
-function preventDefault(event) {
-    event.preventDefault();
-}
 
 const useStyles = makeStyles((theme) => ({
     seeMore: {
@@ -20,12 +18,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PendingTable() {
+export default function PendingTable(props) {
     const classes = useStyles();
-    const [loading,data] = useTableDone();
+    const {limit} = props;
+    const [loading, data] = useTableDone(limit);
     return (
         <React.Fragment>
             {/*<Title>Recent Orders</Title>*/}
+            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                Done Tasks
+            </Typography>
             <Table size="small">
                 <TableHead>
                     <TableRow>
@@ -41,18 +43,21 @@ export default function PendingTable() {
                         <TableRow key={row._id}>
                             <TableCell>{row.title}</TableCell>
                             <TableCell>{row.creationDate}</TableCell>
-                            <TableCell>{moment.duration(row.duration,'s').humanize()}</TableCell>
+                            <TableCell>{moment.duration(row.duration, 's').humanize()}</TableCell>
                             <TableCell>{row.realizationDate}</TableCell>
-                            <TableCell>{moment.duration(row.progress,'s').humanize()}</TableCell>
+                            <TableCell>{moment.duration(row.progress, 's').humanize(true)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            <div className={classes.seeMore}>
-                <Link color="primary" href="#" onClick={preventDefault}>
-                    See more orders
-                </Link>
-            </div>
+            {
+                limit &&
+                <div className={classes.seeMore}>
+                    <Link component={RouterLink} to={`/done-tasks`} color="primary" >
+                        See more orders
+                    </Link>
+                </div>
+            }
         </React.Fragment>
     );
 }

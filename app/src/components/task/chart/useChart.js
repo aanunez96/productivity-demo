@@ -1,5 +1,5 @@
 import {gql, useQuery} from "@apollo/client";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {Context} from "../../../utils/Store";
 import moment from 'moment';
 
@@ -20,11 +20,11 @@ productivity(
 }`;
 
 export default function useChart() {
-    const [end, setEnd] = useState(moment().format("YYYY-MM-DD"));
-    const [start, setStart] = useState(moment(moment(end).subtract(7, "days")).format("YYYY-MM-DD"));
-    const [user] = useContext(Context);
+    const end = moment().format("YYYY-MM-DD");
+    const start = moment(moment(end).subtract(7, "days")).format("YYYY-MM-DD");
+    const [state] = useContext(Context);
 
-    const {loading, data} = useQuery(Productivity, {variables: {start, end, owner: user.id}});
+    const {loading, data} = useQuery(Productivity, {variables: {start, end, owner: state.user.id}});
 
     return [
         loading,
