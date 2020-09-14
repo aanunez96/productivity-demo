@@ -5,162 +5,25 @@ import {
     Route,
     Redirect,
 } from "react-router-dom";
-import Home from './screens/Home';
-import Header from './components/themes/Header';
-import SingUp from './screens/authentication/SignUp';
-import SingIn from './screens/authentication/SignIn';
-import {makeStyles, createMuiTheme} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import Ad from './screens/ad/Ad';
-import Category from './screens/ad/Category';
-import CreateAd from './screens/ad/CreateAd';
-import EditProfile from './screens/user/EditProfile';
-import Profile from './screens/user/Profile';
-import UpdateAdView from './screens/ad/UpdateAdView';
+import Navigator from './components/themes/Navigator';
+import Home from './screens/home/Home';
+import SingIn from "./screens/authentication/SignIn";
+import SingUp from "./screens/authentication/SignUp";
 import Error from "./screens/Error";
-import {Context} from "./utils/Store";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
+import {Context} from "./utils/Store";
+import EditProfile from "./screens/user/EditProfile";
+import CreateTask from "./screens/task/CreateTask";
+import UpdateTask from "./screens/task/UpdateTask";
+import ListPendingTask from "./screens/task/ListPendingTasks";
+import DoneTasks from "./screens/task/DoneTasks";
+import Container from "@material-ui/core/Container";
+import Box from '@material-ui/core/Box';
 
-
-let theme = createMuiTheme({
-    palette: {
-        primary: {
-            light: '#63ccff',
-            main: '#009be5',
-            dark: '#006db3',
-        },
-    },
-    typography: {
-        h5: {
-            fontWeight: 500,
-            fontSize: 26,
-            letterSpacing: 0.5,
-        },
-    },
-    shape: {
-        borderRadius: 8,
-    },
-    props: {
-        MuiTab: {
-            disableRipple: true,
-        },
-    },
-    mixins: {
-        toolbar: {
-            minHeight: 48,
-        },
-    },
-});
-
-theme = {
-    ...theme,
-    overrides: {
-        MuiDrawer: {
-            paper: {
-                backgroundColor: '#18202c',
-            },
-        },
-        MuiButton: {
-            label: {
-                textTransform: 'none',
-            },
-            contained: {
-                boxShadow: 'none',
-                '&:active': {
-                    boxShadow: 'none',
-                },
-            },
-        },
-        MuiTabs: {
-            root: {
-                marginLeft: theme.spacing(1),
-            },
-            indicator: {
-                height: 3,
-                borderTopLeftRadius: 3,
-                borderTopRightRadius: 3,
-                backgroundColor: theme.palette.common.white,
-            },
-        },
-        MuiTab: {
-            root: {
-                textTransform: 'none',
-                margin: '0 16px',
-                minWidth: 0,
-                padding: 0,
-                [theme.breakpoints.up('md')]: {
-                    padding: 0,
-                    minWidth: 0,
-                },
-            },
-        },
-        MuiIconButton: {
-            root: {
-                padding: theme.spacing(1),
-            },
-        },
-        MuiTooltip: {
-            tooltip: {
-                borderRadius: 4,
-            },
-        },
-        MuiDivider: {
-            root: {
-                backgroundColor: '#404854',
-            },
-        },
-        MuiListItemText: {
-            primary: {
-                fontWeight: theme.typography.fontWeightMedium,
-            },
-        },
-        MuiListItemIcon: {
-            root: {
-                color: 'inherit',
-                marginRight: 0,
-                '& svg': {
-                    fontSize: 20,
-                },
-            },
-        },
-        MuiAvatar: {
-            root: {
-                width: 32,
-                height: 32,
-            },
-        },
-    },
-};
-
-const drawerWidth = 256;
-
-const useStyles = makeStyles(() => ({
-    drawer: {
-        [theme.breakpoints.up('sm')]: {
-            width: drawerWidth,
-            flexShrink: 0,
-        },
-    },
-    app: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh'
-    },
-    main: {
-        flex: 1,
-        padding: theme.spacing(3, 4),
-        background: '#eaeff1',
-    },
-    button: {
-        marginLeft: "90%",
-    },
-    footer: {
-        padding: theme.spacing(2),
-        background: '#eaeff1',
-    },
-}));
 
 function Copyright() {
     return (
@@ -175,19 +38,37 @@ function Copyright() {
     );
 }
 
-function App() {
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        minHeight: '100vh'
+    },
+    appBarSpacer: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        height: '100vh',
+        overflow: 'auto',
+    },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
+        minHeight: '100vh',
+    },
+}));
+
+export default function Dashboard() {
     const classes = useStyles();
-    const [user] = useContext(Context);
+    const [state] = useContext(Context);
 
     function PrivateRoute({children, ...rest}) {
         return (
             <Route
                 {...rest}
                 render={({location}) =>
-                    user === "undefined" ?
+                    state.user === "undefined" ?
                         <LinearProgress/>
                         :
-                        user ? (
+                        state.user ? (
                             children
                         ) : (
                             <Redirect
@@ -204,48 +85,48 @@ function App() {
 
     return (
         <Router>
-            <div className={classes.app}>
-                <Header/>
-                <main className={classes.main}>
-                    <Switch>
-                        <Route exact path="/">
-                            <Home/>
-                        </Route>
-                        <Route exact path="/ad/:category/:adId">
-                            <Ad/>
-                        </Route>
-                        <Route exact path="/category/:category">
-                            <Category/>
-                        </Route>
-                        <PrivateRoute exact path="/create-ad/">
-                            <CreateAd/>
-                        </PrivateRoute>
-                        <PrivateRoute exact path="/edit-ad/:adId">
-                            <UpdateAdView/>
-                        </PrivateRoute>
-                        <Route exact path="/profile/:userId">
-                            <Profile/>
-                        </Route>
-                        <PrivateRoute exact path="/edit-profile">
-                            <EditProfile/>
-                        </PrivateRoute>
-                        <Route exact path="/login">
-                            <SingIn/>
-                        </Route>
-                        <Route exact path="/sign-up">
-                            <SingUp/>
-                        </Route>
-                        <Route path="*">
-                            <Error content={"Error 404 Page not found"}/>
-                        </Route>
-                    </Switch>
+            <div className={classes.root}>
+                <CssBaseline/>
+                <Navigator/>
+                <main className={classes.content}>
+                    <div className={classes.appBarSpacer}/>
+                    <Container maxWidth="lg" className={classes.container}>
+                        <Switch>
+                            <Route exact path="/login">
+                                <SingIn/>
+                            </Route>
+                            <Route exact path="/sign-up">
+                                <SingUp/>
+                            </Route>
+                            <PrivateRoute exact path="/">
+                                <Home/>
+                            </PrivateRoute>
+                            <PrivateRoute exact path="/edit-profile">
+                                <EditProfile/>
+                            </PrivateRoute>
+                            <PrivateRoute exact path="/pending-tasks">
+                                <ListPendingTask/>
+                            </PrivateRoute>
+                            <PrivateRoute exact path="/done-tasks">
+                                <DoneTasks/>
+                            </PrivateRoute>
+                            <PrivateRoute exact path="/create-task">
+                                <CreateTask/>
+                            </PrivateRoute>
+                            <PrivateRoute exact path="/edit-task/:taskId">
+                                <UpdateTask/>
+                            </PrivateRoute>
+                            <Route path="*">
+                                <Error content={"Error 404 Page not found"}/>
+                            </Route>
+                        </Switch>
+
+                        <Box pt={4}>
+                            <Copyright />
+                        </Box>
+                    </Container>
                 </main>
-                <footer className={classes.footer}>
-                    <Copyright/>
-                </footer>
             </div>
         </Router>
     );
 }
-
-export default App;

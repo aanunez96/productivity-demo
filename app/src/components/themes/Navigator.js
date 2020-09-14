@@ -9,7 +9,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer/Drawer";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
-import { mainListItems, secondaryListItems } from './listItems';
+import {mainListItems} from './listItems';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
     menuButton: {
         marginRight: 36,
     },
+    menuButtonHidden: {
+        display: 'none',
+    },
     title: {
         flexGrow: 1,
     },
@@ -73,9 +76,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9),
         },
-    },
-    menuButtonHidden: {
-        display: 'none',
     },
 }));
 
@@ -119,65 +119,66 @@ export default function Navigator() {
     const handleDrawerClose = () => {
         setOpenDrawer(false);
     };
-    return(
-       <>
-           <AppBar position="absolute" className={clsx(classes.appBar, openDrawer && classes.appBarShift)}>
-               <Toolbar className={classes.toolbar}>
-                   <IconButton
-                       edge="start"
-                       color="inherit"
-                       aria-label="open drawer"
-                       onClick={handleDrawerOpen}
-                       className={clsx(classes.menuButton, openDrawer && classes.menuButtonHidden)}
-                   >
-                       <MenuIcon />
-                   </IconButton>
-                   <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                       Dashboard
-                   </Typography>
-                   <Button component={Link} to={"/create-ad"} size="small">Add Task</Button>
-                   {
-                       (user) ?
-                           <div>
-                               <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}
-                                           color="inherit" className={classes.iconButtonAvatar}>
-                                   <Avatar alt="My Avatar"/>
-                               </IconButton>
-                               <Menu
-                                   id="simple-menu"
-                                   anchorEl={anchorEl}
-                                   keepMounted
-                                   open={Boolean(anchorEl)}
-                                   onClose={handleClose}
-                               >
-                                   <MenuItem component={Link} to="/edit-profile" onClick={handleClose}>Profile</MenuItem>
-                                   <MenuItem onClick={logout}>Logout</MenuItem>
-                               </Menu>
-                           </div>
-                           :
-                           <Button component={Link} to={"/login"} variant="outlined" size="small">
-                               Sign up
-                           </Button>
-                   }
-               </Toolbar>
-           </AppBar>
-           <Drawer
-               variant="permanent"
-               classes={{
-                   paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
-               }}
-               open={openDrawer}
-           >
-               <div className={classes.toolbarIcon}>
-                   <IconButton onClick={handleDrawerClose}>
-                       <ChevronLeftIcon />
-                   </IconButton>
-               </div>
-               <Divider />
-               <List>{mainListItems}</List>
-               <Divider />
-               <List>{secondaryListItems}</List>
-           </Drawer>
-       </>
+    return (
+        <>
+            <AppBar position="absolute" className={clsx(classes.appBar, openDrawer && classes.appBarShift)}>
+                <Toolbar className={classes.toolbar}>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        className={clsx(classes.menuButton, openDrawer && classes.menuButtonHidden)}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography component="h1" variant="h6" color="inherit"  className={classes.title}>
+                        TimerApp
+                    </Typography>
+                    <Button component={Link} to={"/create-task"} color="inherit"  size="small">
+                        Add Task
+                    </Button>
+                    {
+                        (user) ?
+                            <div>
+                                <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}
+                                            color="inherit" className={classes.iconButtonAvatar}>
+                                    <Avatar alt="My Avatar"/>
+                                </IconButton>
+                                <Menu
+                                    id="simple-menu"
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItem component={Link} to="/edit-profile"
+                                              onClick={handleClose}>Profile</MenuItem>
+                                    <MenuItem onClick={logout}>Logout</MenuItem>
+                                </Menu>
+                            </div>
+                            :
+                            <Button component={Link} to={"/login"} variant="outlined" size="small">
+                                Sign up
+                            </Button>
+                    }
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                variant="permanent"
+                classes={{
+                    paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
+                }}
+                open={openDrawer}
+            >
+                <div className={classes.toolbarIcon}>
+                    <IconButton onClick={handleDrawerClose}>
+                        <ChevronLeftIcon/>
+                    </IconButton>
+                </div>
+                <Divider/>
+                <List>{mainListItems}</List>
+            </Drawer>
+        </>
     );
 }
