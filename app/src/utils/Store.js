@@ -57,7 +57,7 @@ const Store = ({children}) => {
 
     useEffect(() => {
         fetchAuthenticatedUser();
-    }, [true]);
+    }, []);
 
     return (
         <Context.Provider value={[state, dispatch]}>

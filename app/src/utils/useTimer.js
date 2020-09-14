@@ -42,7 +42,6 @@ export default function useTimer() {
 
 
     if (data?.task && !state.taskInProgress) {
-        console.log (data);
         dispatch({
             type: "SET_TASK",
             payload: data.task
@@ -177,12 +176,12 @@ export default function useTimer() {
         }
     });
 
-    // window.addEventListener('beforeunload', async function (e) {
-    //     const progress = state.taskInProgress.duration - timeLeft.asSeconds();
-    //     localStorage.setItem("statusTimer", 'stop');
-    //     localStorage.setItem("initialTimer", null);
-    //     await update({progress: Math.round(progress)});
-    // });
+    window.addEventListener('beforeunload', async function (e) {
+        const progress = state.taskInProgress.duration - timeLeft.asSeconds();
+        localStorage.setItem("statusTimer", 'stop');
+        localStorage.setItem("initialTimer", null);
+        await update({progress: Math.round(progress)});
+    });
 
     return [
         (moment.isDuration(timeLeft)) ? `${timeLeft.minutes()}: ${timeLeft.seconds()}` : timeLeft,
