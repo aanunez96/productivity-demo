@@ -46,7 +46,7 @@ export default function useListPending() {
             fetchPolicy: "network-only"
         }
     );
-    const [change, {data: dataMutation}] = useMutation(CHANGE_TASK);
+    const [change] = useMutation(CHANGE_TASK);
 
     const [taskForChange, setTaskForChange] = useState(false);
 

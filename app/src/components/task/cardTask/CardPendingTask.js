@@ -17,7 +17,6 @@ import Modal from '@material-ui/core/Modal';
 import Paper from "@material-ui/core/Paper/Paper";
 import Button from '@material-ui/core/Button';
 
-
 const useStyles = makeStyles(theme => ({
     root: {
         height: 350,

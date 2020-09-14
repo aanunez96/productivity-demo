@@ -28,7 +28,7 @@ export default function useUpdateProfile() {
             type: "GET_USER",
             payload: {...state.user, profile: data.modifyUser.profile}
         });
-    },[data]);
+    });
 
 
     const update = async (values, error) => {

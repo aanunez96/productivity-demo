@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import App from './App';
-import Dashboard from './dashboard.js';
+import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {ApolloProvider} from "@apollo/client";
 import client from "./utils/apollo-client";
@@ -14,7 +13,7 @@ ReactDOM.render(
         <ErrorBoundary>
             <Store>
                 <ApolloProvider client={client}>
-                    <Dashboard/>
+                    <App/>
                 </ApolloProvider>
             </Store>
         </ErrorBoundary>

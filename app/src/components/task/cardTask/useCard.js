@@ -19,7 +19,7 @@ mutation updateTask(
 }
 `;
 export default function useCard(taskId) {
-    const [createUpdateAd, {data: dataMutation}] = useMutation(UPDATE_AD);
+    const [createUpdateAd] = useMutation(UPDATE_AD);
     const [invalidSubmit, setInvalidSubmit] = useState(false);
 
     const deleteTask = async (refetch) => {

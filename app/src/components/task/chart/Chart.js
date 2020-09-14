@@ -10,8 +10,7 @@ export default function Chart() {
     const [loading, data] = useChart();
 
     return (
-        <React.Fragment>
-            {/*<Title>Today</Title>*/}
+        <>
             <ResponsiveContainer>
                 <LineChart
                     data={loading ? [] : data}
@@ -36,6 +35,6 @@ export default function Chart() {
                 </LineChart>
             </ResponsiveContainer>
             {loading && <LinearProgress/>}
-        </React.Fragment>
+        </>
     );
 }

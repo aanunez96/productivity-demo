@@ -5,7 +5,6 @@ import CardPendingTask from '../cardTask/CardPendingTask';
 import Skeleton from '@material-ui/lab/Skeleton';
 import {Box} from "@material-ui/core";
 import useListPending from "./useListPending";
-import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import CardInProgress from '../cardTask/CardInProgressTask';
@@ -16,12 +15,12 @@ export default function ListPending() {
     const [loading, data, category, setCategory, refetch, change, taskForChange] = useListPending();
     return (
         < Grid container spacing={2}>
-            <Grid item xs={2}>
+            <Grid item md={3} xs={4}>
                 <Typography component="h2" variant="h6" color="primary" gutterBottom>
                     Pending Tasks
                 </Typography>
             </Grid>
-            <Grid item xs={10}>
+            <Grid item md={9} xs={8}>
                 <Select
                     labelId="select-outlined"
                     onChange={e => setCategory(e.target.value)}
