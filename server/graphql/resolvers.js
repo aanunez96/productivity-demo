@@ -144,7 +144,7 @@ const resolvers = {
             let task;
             let date;
             const tasks = [];
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= 50; i++) {
                 duration = faker.random.number(7200);
                 percent = Math.floor(duration * 4 / 5);
                 doneIn = faker.random.number(duration - percent);
@@ -154,11 +154,11 @@ const resolvers = {
                     owner: owner,
                     classification: 'customized',
                     description: faker.lorem.sentences(4),
-                    status: 'pending',
+                    status: 'done',
                     creationDate: moment(faker.date.recent(14)).format('YYYY-MM-DD'),
-                    // realizationDate: moment(date).format('YYYY-MM-DD'),
+                    realizationDate: moment(date).format('YYYY-MM-DD'),
                     duration: duration,
-                    // progress: percent + doneIn,
+                    progress: percent + doneIn,
                 });
                 task.save();
                 tasks.push(task);

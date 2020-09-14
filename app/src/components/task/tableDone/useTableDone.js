@@ -1,4 +1,4 @@
-import {gql, useQuery} from "@apollo/client";
+import {gql, useMutation, useQuery} from "@apollo/client";
 import {useContext} from "react";
 import {Context} from "../../../utils/Store";
 
@@ -24,13 +24,32 @@ tasks(
 }
 }`;
 
+const GENARATE_RANDOM = gql`
+mutation randomTask(
+  $owner : ID!
+){
+  randomDoneTask(owner: $owner){
+    _id
+  }
+}`;
+
 export default function useChart(limit) {
     const [state] = useContext(Context);
+    const [randomTasks] = useMutation(GENARATE_RANDOM);
+    const {loading, data, refetch} = useQuery(DONE, {variables: {pending: false, userId: state.user.id, limit}});
+    const generateRandomTask = async () => {
+        try {
+            await randomTasks({variables: {owner: state.user.id}});
+            refetch();
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
-    const {loading, data} = useQuery(DONE, {variables: {pending:false, userId: state.user.id, limit}});
 
     return [
         loading,
         data ? data.tasks : [],
+        generateRandomTask
     ];
 }

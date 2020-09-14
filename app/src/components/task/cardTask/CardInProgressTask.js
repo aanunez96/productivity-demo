@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -17,7 +17,6 @@ import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import Paper from "@material-ui/core/Paper/Paper";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
-import Toolbar from "@material-ui/core/Toolbar";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 const useStyles = makeStyles(theme => ({
