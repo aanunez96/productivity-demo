@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function CardPendingTask(props) {
-    const {data, refetch} = props;
+    const {data, refetch, change, taskForChange} = props;
     const classes = useStyles();
     const [deleteTask, invalidSubmit] = useCard(data._id);
     const [modal, setModal] = useState(false);
@@ -90,11 +90,15 @@ export default function CardPendingTask(props) {
                 </CardContent>
                 <Divider variant="middle"/>
                 <CardActions className={classes.action}>
-                    <IconButton aria-label="change" className={classes.margin}>
+                    <IconButton
+                        aria-label="change"
+                        className={classes.margin}
+                        onClick={() => change(data._id)}
+                        color={(taskForChange)? (data._id === taskForChange)? "secondary": "primary" : "inherit"}
+                    >
                         <CachedIcon/>
                     </IconButton>
-                    <IconButton aria-label="delete" onClick={() => setModal(true)}
-                                className={classes.margin}>
+                    <IconButton aria-label="delete" onClick={() => setModal(true)}>
                         <DeleteIcon/>
                     </IconButton>
                 </CardActions>

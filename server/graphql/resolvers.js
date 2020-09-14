@@ -56,12 +56,13 @@ const resolvers = {
 
             const tasks = await Task.find(query)
                 .limit(limit)
-                .sort((sort) ? `-${sort}` : '')
+                .sort(sort || '')
                 .exec();
+            pending && tasks.shift();
             return tasks.map(e => ({...e._doc, owner: accountsServer.findUserById(e.owner)}));
         },
         task: async (_, {taskId, inProgress}) => {
-            const task = (inProgress) ? (await Task.find({status: 'pending'}).sort('creationDate').limit(1).exec())[0] : await Task.findById(new ObjectID(taskId));
+            const task = (inProgress) ? (await Task.find({status: 'pending'}).sort('order').limit(1).exec())[0] : await Task.findById(new ObjectID(taskId));
             return (task) ? {...task._doc, owner: accountsServer.findUserById(task.owner)} : task;
         },
         user: async (_, {userId}) => {
@@ -163,6 +164,17 @@ const resolvers = {
                 tasks.push(task);
             }
             return tasks;
+        },
+        async reorder(_,{taskId1, taskId2}){
+            const task1 = await Task.findOne({_id: new ObjectID(taskId1)}).exec();
+            const task2 = await Task.findOne({_id: new ObjectID(taskId2)}).exec();
+            const order1 = task1.order;
+            const order2 = task2.order;
+            task1.order = order2;
+            task2.order = order1;
+            task1.save();
+            task2.save();
+            return [task1,task2];
         },
         async modifyUser(_, {userId, lastName, name}) {
             const user = await accountsServer.findUserById(userId);

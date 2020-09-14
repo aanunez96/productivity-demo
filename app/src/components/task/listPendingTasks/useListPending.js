@@ -1,4 +1,4 @@
-import {gql, useQuery} from "@apollo/client";
+import {gql, useMutation, useQuery} from "@apollo/client";
 import {useContext} from "react";
 import {Context} from "../../../utils/Store";
 import {useState} from "react";
@@ -12,7 +12,7 @@ query Pendingtask(
 tasks(
   pending: $pending
   userId: $userId
-  sort: "creationDate"
+  sort: "order"
   category: $category
 ){
   _id
@@ -21,8 +21,21 @@ tasks(
   description
   duration
   progress
+  order
 }
 }`;
+const CHANGE_TASK = gql`
+mutation change(
+$taskId1: ID!
+$taskId2: ID!
+){
+  reorder(taskId1:$taskId1,taskId2:$taskId2){
+    _id
+    order
+  }
+}
+`;
+
 
 export default function useListPending() {
     const [state] = useContext(Context);
@@ -33,6 +46,27 @@ export default function useListPending() {
             fetchPolicy: "network-only"
         }
     );
+    const [change, {data: dataMutation}] = useMutation(CHANGE_TASK);
+
+    const [taskForChange, setTaskForChange] = useState(false);
+
+    const changeTask = async (taskId) => {
+        if (taskForChange) {
+            if (taskForChange !== taskId) {
+                try{
+                    await change({variables:{taskId1: taskForChange, taskId2: taskId}});
+                    setTaskForChange(false)
+                } catch (e) {
+                    console.log(e);
+                }
+
+            } else {
+                setTaskForChange(false);
+            }
+        } else {
+            setTaskForChange(taskId);
+        }
+    };
 
     return [
         loading,
@@ -40,5 +74,7 @@ export default function useListPending() {
         category,
         setCategory,
         refetch,
+        changeTask,
+        taskForChange
     ];
 }

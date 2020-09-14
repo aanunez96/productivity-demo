@@ -8,14 +8,20 @@ import useListPending from "./useListPending";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import CardInProgress from '../cardTask/CardInProgressTask';
 
 const categories = ['short', 'medium', 'long', 'none'];
 
 export default function ListPending() {
-    const [loading, data, category, setCategory,refetch] = useListPending();
+    const [loading, data, category, setCategory, refetch, change, taskForChange] = useListPending();
     return (
         < Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={2}>
+                <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                    Pending Tasks
+                </Typography>
+            </Grid>
+            <Grid item xs={10}>
                 <Select
                     labelId="select-outlined"
                     onChange={e => setCategory(e.target.value)}
@@ -28,10 +34,13 @@ export default function ListPending() {
                     )}
                 </Select>
             </Grid>
+            <Grid item lg={4} md={6} xs={12}>
+                <CardInProgress/>
+            </Grid>
             {(loading ? Array.from(new Array(4)) : data).map((item, index) => (
                 <Grid key={index} item lg={4} md={6} xs={12}>
                     {item ?
-                        <CardPendingTask data={item} refetch={refetch}/>
+                        <CardPendingTask data={item} refetch={refetch} change={change} taskForChange={taskForChange}/>
                         :
                         (
                             <Box>

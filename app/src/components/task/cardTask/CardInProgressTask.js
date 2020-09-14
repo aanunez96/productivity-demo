@@ -21,7 +21,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        height: 380,
+        height: 350,
         textAlign: 'center',
     },
     header: {

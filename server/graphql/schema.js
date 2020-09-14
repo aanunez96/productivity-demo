@@ -22,6 +22,7 @@ const typeDefs = gql`
     realizationDate:  Date!
     progress:  Int!
     duration: Int!
+    order: Int!
   }
   
   type DayProductivity{
@@ -66,6 +67,8 @@ const typeDefs = gql`
     modifyTask(title: String, taskId: ID!, description: String, status: Status, classification: Category, duration: Int, isDelete: Boolean, progress: Int, realizationDate:Date): Task!
 
     randomDoneTask(owner: ID!):[Task!]
+    
+    reorder(taskId1: ID! , taskId2: ID!): [Task!]
         
     modifyUser(userId: ID!, lastName: String, name: String): User  
   } 
