@@ -5,15 +5,23 @@ _the concept is develop a productivity app in which users can manage and filter 
 ## Installation
 To install this project you simply need to have [docker-compose](https://docs.docker.com/compose/install/) installed then clone this and run:
 ```bash
-docker-compose up 
+docker-compose up -d
+```
+Install express dependencies 
+```bash
+docker exec -it raam-express yarn install
+```
+Install react dependencies 
+```bash
+docker exec -it raam-react yarn install
 ```
 To run the server:
 ```bash
-docker exec -it poc-express yarn start
+docker exec -it raam-react yarn start
 ```
 To run the Web App:
 ```bash
-docker exec -it poc-react yarn start
+docker exec -it raam-react yarn start
 ```
 ## Demo Features
 * The project is divided into Front-End(app) and Back-End(server)
