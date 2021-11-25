@@ -1,4 +1,4 @@
-# demo-classified-ad-react-apollo
+# demo-task-manager-apollo
 
 _the concept is develop a productivity app in which users can manage and filter a list of tasks using **react.js**, **apollo-client** and **apollo-sever** with **mongoDB**_
 
